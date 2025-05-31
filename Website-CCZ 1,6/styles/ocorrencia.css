@@ -1,0 +1,101 @@
+body {
+    background-image: url('../images/headerCapaG.jpg');
+    background-repeat: no-repeat; /* Evita que a imagem se repita */
+    background-size: cover; /* Ajusta a imagem para cobrir todo o elemento */
+    background-position: center; /* Centraliza a imagem */
+    font-family: 'Roboto', sans-serif;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+.painel {
+    background-color: #fff;
+    max-width: 500px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.painel h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+form input[type="text"],
+form input[type="number"],
+form textarea,
+form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+form textarea {
+    resize: vertical;
+}
+
+form button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background-color: orange;
+    color: black;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #fdce4c;
+}
+.back-button-container {
+    text-align: center; /* Centraliza o botão horizontalmente */
+    margin-top: 20px; /* Adiciona um espaço acima do botão */
+}
+
+.back-button {
+    display: inline-block; /* Permite definir padding e outras propriedades de bloco */
+    padding: 10px 20px; /* Espaçamento interno do botão */
+    background-color: #FFA500; /* Cor laranja */
+    color: black; /* Cor do texto branco */
+    text-decoration: none; /* Remove o sublinhado padrão do link */
+    border-radius: 5px; /* Adiciona bordas arredondadas */
+    font-size: 16px; /* Tamanho da fonte */
+    transition: background-color 0.3s ease; /* Transição suave para o hover */
+}
+
+.back-button:hover {
+    background-color: #FF8C00; /* Laranja mais escuro no hover */
+}
+
+.botao-adotar {
+            display: inline-block; /* Permite definir largura e altura, e centralizar o texto */
+            padding: 10px 20px; /* Espaçamento interno */
+            background-color: #FFA500; /* Cor laranja */
+            color: white; /* Cor do texto */
+            text-decoration: none; /* Remove o sublinhado do link */
+            border-radius: 5px; /* Bordas arredondadas */
+            font-family: Arial, sans-serif; /* Fonte do texto */
+            font-size: 16px; /* Tamanho da fonte */
+            font-weight: bold; /* Texto em negrito */
+            border: none; /* Remove a borda padrão do botão */
+            cursor: pointer; /* Muda o cursor para indicar que é clicável */
+            transition: background-color 0.3s ease; /* Transição suave na mudança de cor */
+        }
+
+        .botao-adotar:hover {
+            background-color: #FF8C00; /* Laranja mais escuro ao passar o mouse */
+        }

@@ -1,0 +1,106 @@
+body {
+    background-image: url('../images/headerCapaG.jpg');
+    background-repeat: no-repeat; /* Evita que a imagem se repita */
+    background-size: cover; /* Ajusta a imagem para cobrir todo o elemento */
+    background-position: center; /* Centraliza a imagem */
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    max-width: 90%;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
+    width: calc(100% - 12px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+button[type="submit"] {
+    background-color: orange;
+    color: black;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: orange;
+}
+
+.login-link {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #777;
+}
+
+.login-link a {
+    color: orange;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+.elemento-especifico {
+    background-image: ('images/headerCapaG.jpg');
+    background-repeat: repeat-y; /* Repete a imagem verticalmente */
+}
+.back-button-container {
+    text-align: center; /* Centraliza o botão horizontalmente */
+    margin-top: 20px; /* Adiciona um espaço acima do botão */
+}
+
+.back-button {
+    display: inline-block; /* Permite definir padding e outras propriedades de bloco */
+    padding: 10px 20px; /* Espaçamento interno do botão */
+    background-color: #FFA500; /* Cor laranja */
+    color: black; /* Cor do texto branco */
+    text-decoration: none; /* Remove o sublinhado padrão do link */
+    border-radius: 5px; /* Adiciona bordas arredondadas */
+    font-size: 16px; /* Tamanho da fonte */
+    transition: background-color 0.3s ease; /* Transição suave para o hover */
+}
+
+.back-button:hover {
+    background-color: #FF8C00; /* Laranja mais escuro no hover */
+}
