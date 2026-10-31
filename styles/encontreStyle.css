@@ -1,0 +1,450 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    /* background-color: #f0f2f5; /* Remove or comment this out */
+    padding: 20px; /* Keep padding if you want it around the content */
+    box-sizing: border-box;
+    background-image: url('../images/headerCapaG.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    /* You had padding: 20px; twice, removed one. */
+}
+
+html, body {
+    height: 100%; /* Makes html and body take up full viewport height */
+    margin: 0; /* Remove default margin */
+}
+
+
+
+.panels-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os painéis quebrem para a próxima linha em telas menores */
+    gap: 20px; /* Espaço entre os painéis */
+    justify-content: center; /* Centraliza os painéis na horizontal */
+}
+
+.panel-container {
+    flex: 1 0 300px; /* Define o tamanho base e permite o crescimento/encolhimento */
+    max-width: 600px; /* Largura máxima de cada painel-container */
+}
+
+.panel {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-align: center;
+    height: 100%; /* Garante que os painéis tenham a mesma altura (se o conteúdo for semelhante) */
+}
+
+.image-container {
+    width: 100%;
+    height: 200px; /* Altura fixa para a imagem nos painéis lado a lado */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e9ecef; /* Cor de fundo para o container da imagem */
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que a imagem cubra o container sem distorcer */
+    display: block;
+}
+
+.content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Espaça o conteúdo internamente */
+    flex-grow: 1; /* Permite que o conteúdo cresça para preencher o espaço */
+}
+
+.title {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.description {
+    font-size: 1em;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 15px;
+    flex-grow: 1; /* Empurra o botão para baixo */
+}
+
+.contact-button {
+    display: inline-block;
+    background-color: orange;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    align-self: center; /* Centraliza o botão horizontalmente dentro do content */
+}
+
+.contact-button:hover {
+    background-color:orange;
+}
+
+/* Media query para telas menores, onde os painéis ocuparão a largura total */
+@media (max-width: 767px) {
+    .panel-container {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+
+    .panel {
+        flex-direction: column; /* Garante que a imagem fique acima do texto em telas menores */
+        text-align: center;
+    }
+
+    .image-container {
+        height: 300px; /* Altura maior para a imagem quando em tela cheia */
+    }
+
+    .content {
+        text-align: center;
+    }
+
+    .contact-button {
+        align-self: center;
+    }
+}
+
+/*
+CORES
+#D7F20C AMARELO 
+#188C41 VERDE
+#F25D27 LARANJA
+#592411 MARROM
+#F23322 VERMELHO
+
+font-family: "Roboto", sans-serif;
+font-family: "Monomakh", system-ui;
+font-family: "Noto Znamenny Musical Notation", sans-serif;
+font-family: "Neuton", serif;
+font-family: "Yanone Kaffeesatz", sans-serif;
+*/
+
+
+*{
+    
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+
+h1{
+    font-family: 'Roboto', sans-serif;
+    text-shadow: 4px 4px 6px #000;
+    font-weight: 700;
+    font-size: max(44px, 5.2vw);
+}
+
+h2{
+    font-family: 'Roboto', sans-serif;
+    text-shadow: 4px 4px 6px #000;
+    font-weight: 700;
+    font-size: max(20px, 2.8vw);
+
+}
+
+
+/*------------ BOTAO CHAMADA-------*/
+div.chamada a{
+    font-size: max(16px, 0.8vw);
+    color: #000;
+    text-decoration: none;
+    padding: 20px 80px;
+    border-radius: 50px;
+    font-weight: 600;
+    background: linear-gradient();
+
+    display: inline-block;
+
+    animation-name: HeaderA-moverParaCima;
+    animation-duration: 3s;
+    animation-delay: 3s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: backwards;
+    transition: .3s ease-in-out;
+}
+
+div.chamada a:hover{
+    opacity: .8;
+}
+
+/*ELEMENTOS DO HEADER*/
+
+
+  
+/*---------- NAVEBAR ------- */
+
+header nav#nav-esquerda{
+    width: 100%;
+    height: 150px;
+
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+header nav#nav-esquerda div#logo{
+    max-width: 100px;
+    max-height: 120px;
+    margin-left: 5rem;
+}
+
+header nav#nav-esquerda div#logo img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+/*----------- MENU HAMBURGUER ---------------*/
+
+header nav#nav-esquerda {
+    width: auto;
+    margin-right: 3rem; 
+}
+
+header nav#nav-esquerda div#logo img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+header nav#nav-esquerda ul#icone-menu{
+    display: none;
+}
+
+header nav#nav-esquerda ul#icone-menu li ion-icon{
+    font-size: 50px;
+    color: #fff;
+    margin-right: 10rem;
+}
+
+/*------------- MENU -----------------*/
+
+header nav#nav-esquerda ul.menu-principal{
+    margin-left: 10rem;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+header nav#nav-esquerda ul.menu-principal li{
+    list-style: none;
+    margin-right: 2rem;
+}
+
+header nav#nav-esquerda ul.menu-principal li a{
+    text-decoration: none;
+    color: black;
+    font-size: 110%;
+    text-shadow: 4px 6px 10px #000;
+    padding-bottom: 10px;
+    transition: .3s ease-in-out;
+    
+}
+
+header nav#nav-esquerda ul.menu-principal li a:hover{
+    opacity: .6;
+    border-bottom: 1px solid #fff;
+}
+
+header div.chamada{
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+header div.chamada h1{
+    color:#000;
+
+    /*animation-name: HeaderH1-moverParaDireita;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;*/
+}
+
+header div.chamada h2{
+    color:orange;
+
+    margin-bottom: 55px;
+
+    /*animation-name: HeaderH1-moverParaEsquerda;
+    animation-duration: 1.5s;
+    animation-delay: 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: backwards;*/
+}
+
+
+
+/*SEÇÃO IMAGENS DOS ANIMAIS PARA ADOÇÃO*/
+
+section.adocao {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    margin-bottom: 60px;
+}
+
+section.adocao h2 {
+    margin-top: 40px;
+    margin-bottom: 50px;
+    max-width: 850px;
+    font-size: max(22px, 2.8vw);
+    text-align: center;
+    color: #000;
+}
+
+section.adocao div.adocao-container {
+    width: 90%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Adicione este CSS para espaçamento entre os cards */
+.card-group {
+    display: flex; 
+    flex-wrap: wrap; /* Para que os cards quebrem para a próxima linha */
+    gap: 60px; /* Define o espaçamento entre as linhas e as colunas */
+    justify-content: center; /* Centraliza os cards caso não preencham a linha */
+}
+
+.card-group .card {
+    
+    flex: 1 1 calc(33.33% - 20px); 
+    max-width: calc(33.33% - 20px); /* Garante que não exceda */
+}
+
+/* Media query para responsividade (exemplo) */
+@media (max-width: 768px) {
+    .card-group .card {
+        flex: 1 1 calc(50% - 20px); /* 2 colunas em telas menores */
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .card-group .card {
+        flex: 1 1 100%; /* 1 coluna em telas muito pequenas */
+        max-width: 100%;
+    }
+}
+
+/*ELEMENTOS DO FOOTER*/
+
+footer{
+    width: 100%;
+    background: #fff;
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+footer div.footer-container{
+    width: 100%;
+    display: felx;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+footer div.footer-container div.logo-footer{
+    width: 150px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    cursor: pointer;
+   
+}
+
+footer div.footer-container div.logo-footer img{
+    max-width: 100%;
+}
+
+footer div.footer-container div.footer-info{
+    width: 70%;
+    margin-bottom: 50px;    
+    padding-top: 20px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+footer div.footer-container div.footer-info nav.nav-footer ul{
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+
+footer div.footer-container div.footer-info nav.nav-footer ul li{
+    list-style: none;
+    margin-bottom: 15px;
+}
+
+footer div.footer-container div.footer-info nav.nav-footer ul li a{
+    text-decoration: none;
+    color: black;
+    font-size: 110%;
+
+    transition: .3S ease-out;
+}
+
+footer div.footer-container div.footer-info nav.nav-footer ul li a:hover{
+    border: 2px solid;
+}
+
+
+
+
+
+ 
+
+.botao-adotar {
+            display: inline-block; /* Permite definir largura e altura, e centralizar o texto */
+            padding: 10px 20px; /* Espaçamento interno */
+            background-color: #FFA500; /* Cor laranja */
+            color: white; /* Cor do texto */
+            text-decoration: none; /* Remove o sublinhado do link */
+            border-radius: 5px; /* Bordas arredondadas */
+            font-family: Arial, sans-serif; /* Fonte do texto */
+            font-size: 16px; /* Tamanho da fonte */
+            font-weight: bold; /* Texto em negrito */
+            border: none; /* Remove a borda padrão do botão */
+            cursor: pointer; /* Muda o cursor para indicar que é clicável */
+            transition: background-color 0.3s ease; /* Transição suave na mudança de cor */
+        }
+
+        .botao-adotar:hover {
+            background-color: #FF8C00; /* Laranja mais escuro ao passar o mouse */
+        }
+
+.Comunidade h2 {
+            text-align: center; /* Centraliza o texto horizontalmente */
+        }

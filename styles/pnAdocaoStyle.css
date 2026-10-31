@@ -1,0 +1,168 @@
+body{
+    font-family: 'Roboto', sans-serif;
+    background-image: url('../images/headerCapaG.jpg');
+    background-repeat: no-repeat; /* Evita que a imagem se repita */
+    background-size: cover; /* Ajusta a imagem para cobrir todo o elemento */
+    background-position: center; /* Centraliza a imagem */
+    padding: 20px;
+
+} 
+
+html, body {
+    height: 100%; /* Makes html and body take up full viewport height */
+    margin: 0; /* Remove default margin */
+}
+
+/* Remove setinhas (spin buttons) de input[type="number"] */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {-moz-appearance: textfield; /* Firefox */
+}
+
+/* Remova ou ajuste esta regra geral se ela ainda existir */
+/*
+form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+*/
+
+.form-group {
+    display: flex; /* Mantém label e input na mesma linha */
+    align-items: baseline; /* Alinha os itens pela linha de base do texto. Experimente 'center' se preferir um alinhamento vertical diferente. */
+    margin-bottom: 10px; /* Espaço entre cada linha do formulário */
+}
+
+.form-group label {
+    /* flex-shrink: 0; */ /* Não é estritamente necessário se você usar uma largura fixa ou max-width */
+    min-width: 80px; /* Define uma largura mínima para os labels, ajuste conforme o mais longo */
+    /* width: auto; */ /* Pode remover a largura fixa anterior se usou */
+    margin-right: 10px; /* Espaço entre o label e o input */
+    text-align: left; /* Alinha o texto do label à esquerda */
+    font-weight: bold;
+    color: #555;
+    padding-top: 8px; /* Para alinhar melhor com o padding do input */
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="email"], /* Inclua o type="email" aqui */
+.form-group textarea,
+.form-group select {
+    flex-grow: 1; /* Permite que o input/textarea ocupe o espaço restante */
+    width: auto; /* Anula o width: 100% para que flex-grow funcione */
+    padding: 8px;
+    /* margin-top: 0; */ /* Garante que não haja margens extras */
+    /* margin-bottom: 0; */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Se você tem um textarea mais alto, pode querer que o label dele também se alinhe ao topo */
+.form-group textarea {
+    align-self: flex-start; /* Alinha o textarea ao topo do seu contêiner flex */
+}
+.painel {
+    background-color: #fff;
+    max-width: 500px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.painel h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+form input[type="text"],
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {-moz-appearance: textfield; /* Firefox */ }
+form textarea,
+form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+form textarea {
+    resize: vertical;
+}
+
+form button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background-color: orange;
+    color: black;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #fdce4c;
+}
+.back-button-container {
+    text-align: center; /* Centraliza o botão horizontalmente */
+    margin-top: 20px; /* Adiciona um espaço acima do botão */
+}
+
+.back-button {
+    display: inline-block; /* Permite definir padding e outras propriedades de bloco */
+    padding: 10px 20px; /* Espaçamento interno do botão */
+    background-color: #FFA500; /* Cor laranja */
+    color: black; /* Cor do texto branco */
+    text-decoration: none; /* Remove o sublinhado padrão do link */
+    border-radius: 5px; /* Adiciona bordas arredondadas */
+    font-size: 16px; /* Tamanho da fonte */
+    transition: background-color 0.3s ease; /* Transição suave para o hover */
+}
+
+.back-button:hover {
+    background-color: #FF8C00; /* Laranja mais escuro no hover */
+}
+
+.botao-adotar {
+            display: inline-block; /* Permite definir largura e altura, e centralizar o texto */
+            padding: 10px 20px; /* Espaçamento interno */
+            background-color: #FFA500; /* Cor laranja */
+            color: white; /* Cor do texto */
+            text-decoration: none; /* Remove o sublinhado do link */
+            border-radius: 5px; /* Bordas arredondadas */
+            font-family: Arial, sans-serif; /* Fonte do texto */
+            font-size: 16px; /* Tamanho da fonte */
+            font-weight: bold; /* Texto em negrito */
+            border: none; /* Remove a borda padrão do botão */
+            cursor: pointer; /* Muda o cursor para indicar que é clicável */
+            transition: background-color 0.3s ease; /* Transição suave na mudança de cor */
+        }
+
+        .botao-adotar:hover {
+            background-color: #FF8C00; /* Laranja mais escuro ao passar o mouse */
+        }

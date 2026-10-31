@@ -1,0 +1,254 @@
+/*
+CORES
+#D7F20C AMARELO 
+#188C41 VERDE
+#F25D27 LARANJA
+#592411 MARROM
+#F23322 VERMELHO
+
+font-family: "Roboto", sans-serif;
+font-family: "Monomakh", system-ui;
+font-family: "Noto Znamenny Musical Notation", sans-serif;
+font-family: "Neuton", serif;
+font-family: "Yanone Kaffeesatz", sans-serif;
+*/
+body {
+    background-image: url('../images/headerCapaG.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    padding: 20px; /* Add this line */
+    /* padding: 20px; -- Consider removing this or moving it to a container */
+}
+
+*{
+    
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+
+h1{
+    font-family: 'Roboto', sans-serif;
+    text-shadow: 4px 4px 6px #000;
+    font-weight: 700;
+    font-size: max(44px, 5.2vw);
+}
+
+h2{
+    font-family: 'Roboto', sans-serif;
+    text-shadow: 4px 4px 6px #000;
+    font-weight: 700;
+    font-size: max(20px, 2.8vw);
+
+}
+
+/*------------ BOTAO CHAMADA-------*/
+div.chamada a{
+    font-size: max(16px, 0.8vw);
+    color: #000;
+    text-decoration: none;
+    padding: 20px 80px;
+    border-radius: 50px;
+    font-weight: 600;
+    background: linear-gradient();
+
+    display: inline-block;
+
+    animation-name: HeaderA-moverParaCima;
+    animation-duration: 3s;
+    animation-delay: 3s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: backwards;
+    transition: .3s ease-in-out;
+}
+
+div.chamada a:hover{
+    opacity: .8;
+}
+
+/*ELEMENTOS DO HEADER*/
+
+
+  
+/*---------- NAVEBAR ------- */
+
+header nav#nav-esquerda{
+    width: 100%;
+    height: 150px;
+
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+header nav#nav-esquerda div#logo{
+    max-width: 100px;
+    max-height: 120px;
+    margin-left: 5rem;
+}
+
+header nav#nav-esquerda div#logo img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+/*----------- MENU HAMBURGUER ---------------*/
+
+header nav#nav-esquerda {
+    width: auto;
+    margin-right: 3rem; 
+}
+
+header nav#nav-esquerda div#logo img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+header nav#nav-esquerda ul#icone-menu{
+    display: none;
+}
+
+header nav#nav-esquerda ul#icone-menu li ion-icon{
+    font-size: 50px;
+    color: #fff;
+    margin-right: 10rem;
+}
+
+/*------------- MENU -----------------*/
+
+header nav#nav-esquerda ul.menu-principal{
+    margin-left: 10rem;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+header nav#nav-esquerda ul.menu-principal li{
+    list-style: none;
+    margin-right: 2rem;
+}
+
+header nav#nav-esquerda ul.menu-principal li a{
+    text-decoration: none;
+    color: black;
+    font-size: 110%;
+    text-shadow: 4px 6px 10px #000;
+    padding-bottom: 10px;
+    transition: .3s ease-in-out;
+    
+}
+
+header nav#nav-esquerda ul.menu-principal li a:hover{
+    opacity: .6;
+    border-bottom: 1px solid #fff;
+}
+
+header div.chamada{
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+header div.chamada h1{
+    color:#000;
+
+    /*animation-name: HeaderH1-moverParaDireita;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;*/
+}
+
+header div.chamada h2{
+    color:orange;
+
+    margin-bottom: 55px;
+
+    /*animation-name: HeaderH1-moverParaEsquerda;
+    animation-duration: 1.5s;
+    animation-delay: 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: backwards;*/
+}
+
+
+
+
+
+/*ELEMENTOS DO FOOTER*/
+
+footer{
+    width: 100%;
+    background: #fff;
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+footer div.footer-container{
+    width: 100%;
+    display: felx;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+footer div.footer-container div.logo-footer{
+    width: 150px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    cursor: pointer;
+   
+}
+
+footer div.footer-container div.logo-footer img{
+    max-width: 100%;
+}
+
+footer div.footer-container div.footer-info{
+    width: 70%;
+    margin-bottom: 50px;    
+    padding-top: 20px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+footer div.footer-container div.footer-info nav.nav-footer ul{
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+
+footer div.footer-container div.footer-info nav.nav-footer ul li{
+    list-style: none;
+    margin-bottom: 15px;
+}
+
+footer div.footer-container div.footer-info nav.nav-footer ul li a{
+    text-decoration: none;
+    color: black;
+    font-size: 110%;
+
+    transition: .3S ease-out;
+}
+
+footer div.footer-container div.footer-info nav.nav-footer ul li a:hover{
+    border: 2px solid;
+}
+
+
+
+
+

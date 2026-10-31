@@ -1,0 +1,25 @@
+/*
+CORES
+#D7F20C AMARELO 
+#188C41 VERDE
+#F25D27 LARANJA
+#592411 MARROM
+#F23322 VERMELHO
+
+font-family: "Roboto", sans-serif;
+font-family: "Monomakh", system-ui;
+font-family: "Noto Znamenny Musical Notation", sans-serif;
+font-family: "Neuton", serif;
+font-family: "Yanone Kaffeesatz", sans-serif;
+*/
+
+@media screen and (max-width: 1200px){
+    header{
+
+        background: url('../images/headerCapaG.jpg'); /*precisa preencher o gradient para funcionar, ou retira ele*/
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+    
+    }
+}
