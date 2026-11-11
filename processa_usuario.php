@@ -1,44 +1,53 @@
 <?php
-
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
-// Inclui o arquivo de conexão com o banco de dados
 include 'conexao.php';
+require_once 'enviar_email.php'; // Inclui o arquivo que criamos acima
 
-// Verifica se os dados foram enviados via POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Escapa e limpa os dados para evitar injeção de SQL
     $nome = $conexao->real_escape_string($_POST['nome']);
     $email = $conexao->real_escape_string($_POST['email']);
     $cpf = $conexao->real_escape_string($_POST['cpf']);
     $telefone = $conexao->real_escape_string($_POST['telefone']);
     $senha = $_POST['senha'];
 
-    // Gera um hash seguro da senha
+    // Verificação de duplicidade
+    $sql_verifica = "SELECT id FROM usuarios WHERE email = ? OR cpf = ?";
+    $stmt_verifica = $conexao->prepare($sql_verifica);
+    $stmt_verifica->bind_param("ss", $email, $cpf);
+    $stmt_verifica->execute();
+    $stmt_verifica->store_result();
+
+    if ($stmt_verifica->num_rows > 0) {
+        echo "<script>alert('E-mail ou CPF já registado.'); window.history.back();</script>";
+        exit;
+    }
+    $stmt_verifica->close();
+
+    // Geração do código, expiração e hash
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+    $codigo_validacao = sprintf("%06d", mt_rand(1, 999999));
+    $expiracao_codigo = date('Y-m-d H:i:s', strtotime('+15 minutes'));
 
-    // Prepara a query SQL para inserção de dados
-    $sql = "INSERT INTO Usuarios (nome, email, cpf, telefone, senha_hash) VALUES (?, ?, ?, ?, ?)";
+    // Inserção no banco
+    $sql = "INSERT INTO usuarios (nome, email, cpf, telefone, senha_hash, codigo_validacao, expiracao_codigo) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("sssssss", $nome, $email, $cpf, $telefone, $senha_hash, $codigo_validacao, $expiracao_codigo);
 
-    // Binda os parâmetros à query
-    $stmt->bind_param("sssss", $nome, $email, $cpf, $telefone, $senha_hash);
-
-    // Executa a query e verifica o resultado
     if ($stmt->execute()) {
-        
-        // --- LÓGICA DE REDIRECIONAMENTO ADICIONADA AQUI ---
-        // Redireciona o usuário para a página de login após o sucesso
-        header("Location: LoginMain.php?cadastro=sucesso");
-        exit; // Essencial para parar a execução da página atual
-        
+        // Envia o e-mail usando o PHPMailer
+        $enviado = enviarEmailVerificacao($email, $nome, $codigo_validacao);
+
+        if ($enviado) {
+            header("Location: verificar_email.php?email=" . urlencode($email));
+            exit;
+        } else {
+            echo "Registo efetuado, mas houve um erro ao enviar o e-mail de verificação.";
+        }
     } else {
-        // Se houver erro, você pode exibir ou também redirecionar com um aviso
-        echo "Erro ao cadastrar usuário: " . $stmt->error;
+        echo "Erro ao registar: " . $stmt->error;
     }
 
-    // Fecha a declaração e a conexão
     $stmt->close();
     $conexao->close();
 }

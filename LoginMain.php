@@ -21,6 +21,11 @@
         <input type="password" id="senha" name="senha" required>
     </div>
     <button type="submit">Login</button>
+
+    <div class="login-link">
+        <a href="esqueci_senha.php" class="text-decoration-none">Esqueceu a sua palavra-passe?</a>
+    </div>
+
 </form>
 
         <div class="login-link">
