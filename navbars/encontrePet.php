@@ -105,7 +105,10 @@ session_start();
                         <div class="card-body">
                             <p class="card-text mb-1">
                                 <span class="fw-bold"><?php echo htmlspecialchars($post['autor']); ?></span> 
-                                <?php echo nl2br(htmlspecialchars($post['descricao'])); ?>
+                                <?php 
+                                $descricao_formatada = str_replace(['\r\n', '\n', '\r'], "\n", $post['descricao']);
+                                echo nl2br(htmlspecialchars($descricao_formatada)); 
+                                ?>
                             </p>
                             
                             <hr class="my-2">
