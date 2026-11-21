@@ -12,14 +12,15 @@ function enviarEmailVerificacao($destinatario, $nome, $codigo) {
     try {
         // Configurações do Servidor SMTP (Outlook ou Gmail)
         $mail->isSMTP();
-        $mail->Host       = 'smtp.office365.com'; // Ou 'smtp.gmail.com'
+        $mail->Host       = 'smtp.gmail.com'; // Ou 'smtp.gmail.com'
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'adoteccz@outlook.com';
-        $mail->Password   = 'repzgdlnhurnfmve';
+        $mail->Username   = 'adotecczamericana@gmail.com';
+        $mail->Password   = 'sqeshuqmekotpjax';
+        $mail->CharSet    = 'UTF-8';
         
         // Configuração de segurança e portas
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 465;
+        $mail->Port       = 587;
         
         // Define um limite de tempo de 10 segundos para evitar o carregamento infinito
         $mail->Timeout    = 15; 
@@ -33,7 +34,7 @@ function enviarEmailVerificacao($destinatario, $nome, $codigo) {
             )
         );
 
-        $mail->setFrom('adoteccz@outlook.com', 'Email Adote CCZ Americana');
+        $mail->setFrom('adotecczamericana@gmail.com', 'Noreply Adote CCZ Americana');
         $mail->addAddress($destinatario, $nome);
 
         $mail->isHTML(true);

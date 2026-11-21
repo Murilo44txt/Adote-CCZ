@@ -1,57 +1,130 @@
 <?php
+session_start();
 include 'conexao.php';
-$mensagem_erro = "";
-$email = isset($_GET['email']) ? $_GET['email'] : '';
+require_once 'enviar_email.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email_post = $conexao->real_escape_string($_POST['email']);
-    $codigo_digitado = $conexao->real_escape_string($_POST['codigo']);
+if (!isset($_SESSION['usuario_verificar_id'])) {
+    header("Location: registro.php");
+    exit;
+}
 
-    // Verifica se o código está correto e dentro da validade
-    $sql = "SELECT id FROM usuarios WHERE email = ? AND codigo_validacao = ? AND expiracao_codigo > NOW()";
-    $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("ss", $email_post, $codigo_digitado);
-    $stmt->execute();
-    $stmt->store_result();
+$usuario_id = $_SESSION['usuario_verificar_id'];
+$erro = "";
+$aviso = "";
+$email_verificado = false;
 
-    if ($stmt->num_rows > 0) {
-        // Código válido, limpa as colunas para ativar a conta
-        $sql_ativa = "UPDATE usuarios SET codigo_validacao = NULL, expiracao_codigo = NULL WHERE email = ?";
-        $stmt_ativa = $conexao->prepare($sql_ativa);
-        $stmt_ativa->bind_param("s", $email_post);
-        $stmt_ativa->execute();
-        
-        echo "<script>alert('Conta ativada com sucesso!'); window.location.href='LoginMain.php';</script>";
-        exit;
+// Busca dados completos do usuário para já poder logá-lo se escolher configurar o 2FA
+$sql = "SELECT id, nome, email, nivel_acesso, codigo_validacao, expiracao_codigo FROM Usuarios WHERE id = ?";
+$stmt = $conexao->prepare($sql);
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+$usuario = $stmt->get_result()->fetch_assoc();
+
+if (!$usuario) {
+    unset($_SESSION['usuario_verificar_id']);
+    header("Location: registro.php");
+    exit;
+}
+
+// Gera e envia o código SOMENTE ao chegar aqui (ou ao clicar em reenviar)
+if (empty($usuario['codigo_validacao']) || isset($_GET['reenviar'])) {
+    $codigo_validacao = sprintf("%06d", mt_rand(1, 999999));
+    $expiracao_codigo = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+
+    $sql_up = "UPDATE Usuarios SET codigo_validacao = ?, expiracao_codigo = ? WHERE id = ?";
+    $stmt_up = $conexao->prepare($sql_up);
+    $stmt_up->bind_param("ssi", $codigo_validacao, $expiracao_codigo, $usuario_id);
+    $stmt_up->execute();
+
+    if (enviarEmailVerificacao($usuario['email'], $usuario['nome'], $codigo_validacao)) {
+        $aviso = "Enviamos um código de 6 dígitos para <b>" . htmlspecialchars($usuario['email']) . "</b>.";
     } else {
-        $mensagem_erro = "Código inválido ou expirado. Tente novamente.";
+        $erro = "Não foi possível enviar o e-mail de verificação. Verifique a configuração SMTP.";
+    }
+}
+
+// Valida o código digitado
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $codigo_digitado = trim($_POST['codigo']);
+    $agora = date('Y-m-d H:i:s');
+
+    $stmt->execute();
+    $dados = $stmt->get_result()->fetch_assoc();
+
+    if ($dados['codigo_validacao'] === $codigo_digitado && $dados['expiracao_codigo'] >= $agora) {
+        // Confirma o e-mail e limpa o código usado
+        $sql_ok = "UPDATE Usuarios SET codigo_validacao = NULL, expiracao_codigo = NULL WHERE id = ?";
+        $stmt_ok = $conexao->prepare($sql_ok);
+        $stmt_ok->bind_param("i", $usuario_id);
+        $stmt_ok->execute();
+
+        // Já autentica o usuário na sessão para que ele possa acessar configurar_2fa.php ou o site direto
+        $_SESSION['loggedin']     = true;
+        $_SESSION['id']           = $dados['id'];
+        $_SESSION['nome']         = $dados['nome'];
+        $_SESSION['nivel_acesso'] = $dados['nivel_acesso'] ?? 'usuario';
+
+        unset($_SESSION['usuario_verificar_id']);
+        $email_verificado = true;
+    } else {
+        $erro = "Código inválido ou expirado.";
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Validar E-mail - Adote CCZ</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar E-mail - Adote CCZ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="card p-4 shadow-sm" style="width: 400px;">
-        <h4 class="text-center mb-3">Valide o seu E-mail</h4>
-        <p class="text-muted text-center text-sm">Enviámos um código para <strong><?= htmlspecialchars($email) ?></strong>.</p>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-sm border-0" style="max-width: 420px; width: 100%;">
         
-        <?php if($mensagem_erro): ?>
-            <div class="alert alert-danger p-2 text-center"><?= $mensagem_erro ?></div>
+        <?php if ($email_verificado): ?>
+            <!-- Tela de Escolha Opcional de TOTP após confirmar o e-mail -->
+            <div class="text-center">
+                <div class="mb-3">
+                    <span class="badge bg-success fs-6 px-3 py-2">E-mail Verificado!</span>
+                </div>
+                <h4 class="fw-bold mb-2">Deseja configurar um autenticador?</h4>
+                <p class="small text-muted mb-4">
+                    Você pode adicionar uma camada extra de segurança vinculando o <strong>Google Authenticator</strong> ou <strong>Microsoft Authenticator</strong> agora, ou fazer isso mais tarde pelo seu perfil.
+                </p>
+
+                <div class="d-grid gap-2">
+                    <a href="configurar_2fa.php" class="btn btn-warning fw-bold">Sim, configurar autenticador (2FA)</a>
+                    <a href="index.php" class="btn btn-outline-secondary">Agora não, ir para o site</a>
+                </div>
+            </div>
+
+        <?php else: ?>
+            <!-- Formulário de Verificação do E-mail -->
+            <h4 class="text-center mb-3 fw-bold">Verifique seu E-mail</h4>
+
+            <?php if ($aviso): ?>
+                <div class="alert alert-info p-2 text-center small"><?= $aviso ?></div>
+            <?php endif; ?>
+
+            <?php if ($erro): ?>
+                <div class="alert alert-danger p-2 text-center small"><?= $erro ?></div>
+            <?php endif; ?>
+
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Código recebido por e-mail:</label>
+                    <input type="text" name="codigo" class="form-control text-center fs-4" maxlength="6" placeholder="000000" autofocus required autocomplete="off">
+                </div>
+                <button type="submit" class="btn btn-warning w-100 fw-bold">Confirmar E-mail</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="verificar_email.php?reenviar=1" class="small text-decoration-none">Reenviar código</a>
+            </div>
         <?php endif; ?>
 
-        <form method="POST" action="verificar_email.php?email=<?= urlencode($email) ?>">
-            <input type="hidden" name="email" value="<?= htmlspecialchars($email) ?>">
-            <div class="mb-3">
-                <input type="text" name="codigo" class="form-control text-center fs-4 tracking-widest" maxlength="6" placeholder="000000" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Ativar Conta</button>
-        </form>
     </div>
 </body>
 </html>
