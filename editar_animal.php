@@ -1,16 +1,14 @@
 <?php
-// Proteção de página: somente admin e master
 session_start();
 if (!isset($_SESSION['loggedin']) || ($_SESSION['nivel_acesso'] != 'admin' && $_SESSION['nivel_acesso'] != 'master')) {
     header("Location: index.php");
     exit;
 }
 
-include 'conexao.php'; //
-$id = $_GET['id'];
+include 'conexao.php';
+$id = (int)$_GET['id'];
 $animal = null;
 
-// Busca os dados do animal a ser editado
 $sql = "SELECT * FROM Animais WHERE id = ?";
 $stmt = $conexao->prepare($sql);
 $stmt->bind_param("i", $id);
@@ -28,12 +26,27 @@ $stmt->close();
 <head>
     <meta charset="UTF-8">
     <title>Editar Animal</title>
-    <link rel="stylesheet" href="styles/registro.css"> </head>
+    <link rel="stylesheet" href="styles/registro.css">
+</head>
 <body>
     <div class="container">
-        <h1>Editar Animal</h1>
-        <form action="processa_edicao_animal.php" method="POST">
+        <h1>Editar Animal #<?php echo $animal['id']; ?></h1>
+        <form action="processa_edicao_animal.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo $animal['id']; ?>">
+
+            <div class="form-group">
+                <label>Foto Atual / Alterar Foto (Opcional):</label>
+                <?php if (!empty($animal['foto']) && file_exists($animal['foto'])): ?>
+                    <div style="margin: 8px 0;">
+                        <img src="<?php echo htmlspecialchars($animal['foto']); ?>" alt="Foto atual" style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
+                        <br>
+                        <label style="font-weight: normal; font-size: 0.9rem;">
+                            <input type="checkbox" name="remover_foto" value="1"> Remover foto atual
+                        </label>
+                    </div>
+                <?php endif; ?>
+                <input type="file" name="foto" accept="image/png, image/jpeg, image/webp">
+            </div>
 
             <div class="form-group">
                 <label>Data e Hora da Entrada:</label>
@@ -41,18 +54,15 @@ $stmt->close();
             </div>
             <div class="form-group">
                 <label>Endereço de Origem:</label>
-                <input type="text" name="endereco_origem" value="<?php echo htmlspecialchars($animal['endereco_origem']); ?>">
+                <input type="text" name="endereco_origem" value="<?php echo htmlspecialchars($animal['endereco_origem'] ?? ''); ?>">
             </div>
             <div class="form-group">
                 <label>Motivo do Recolhimento:</label>
-                <textarea name="motivo_recolhimento" rows="3"><?php echo htmlspecialchars($animal['motivo_recolhimento']); ?></textarea>
+                <textarea name="motivo_recolhimento" rows="3"><?php echo htmlspecialchars($animal['motivo_recolhimento'] ?? ''); ?></textarea>
             </div>
             <div class="form-group">
                 <label>Espécie:</label>
-                <select name="especie" required>
-                    <option value="Cachorro" <?php echo ($animal['especie'] == 'Cachorro') ? 'selected' : ''; ?>>Cachorro</option>
-                    <option value="Gato" <?php echo ($animal['especie'] == 'Gato') ? 'selected' : ''; ?>>Gato</option>
-                </select>
+                <input type="text" name="especie" value="<?php echo htmlspecialchars($animal['especie']); ?>" required>
             </div>
             <div class="form-group">
                 <label>Sexo:</label>
@@ -70,15 +80,15 @@ $stmt->close();
             </div>
             <div class="form-group">
                 <label>Raça:</label>
-                <input type="text" name="raca" value="<?php echo htmlspecialchars($animal['raca']); ?>">
+                <input type="text" name="raca" value="<?php echo htmlspecialchars($animal['raca'] ?? ''); ?>">
             </div>
             <div class="form-group">
                 <label>Chip:</label>
-                <input type="text" name="chip" maxlength="15" value="<?php echo htmlspecialchars($animal['chip']); ?>">
+                <input type="text" name="chip" maxlength="15" value="<?php echo htmlspecialchars($animal['chip'] ?? ''); ?>">
             </div>
             <div class="form-group">
                 <label>Pelagem:</label>
-                <input type="text" name="pelagem" value="<?php echo htmlspecialchars($animal['pelagem']); ?>">
+                <input type="text" name="pelagem" value="<?php echo htmlspecialchars($animal['pelagem'] ?? ''); ?>">
             </div>
             <div class="form-group">
                 <label>Peso (kg):</label>

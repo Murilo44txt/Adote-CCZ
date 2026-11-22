@@ -1,31 +1,65 @@
 <?php
-// Proteção de página: somente admin e master
 session_start();
 if (!isset($_SESSION['loggedin']) || ($_SESSION['nivel_acesso'] != 'admin' && $_SESSION['nivel_acesso'] != 'master')) {
     header("Location: index.php");
     exit;
 }
 
-include 'conexao.php'; //
+include 'conexao.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-    // Coleta todos os dados do formulário, incluindo o ID
-    $id = (int)$_POST['id'];
-    $data_entrada = $_POST['data_entrada'];
-    $endereco_origem = !empty($_POST['endereco_origem']) ? $conexao->real_escape_string($_POST['endereco_origem']) : NULL;
-    $motivo_recolhimento = !empty($_POST['motivo_recolhimento']) ? $conexao->real_escape_string($_POST['motivo_recolhimento']) : NULL;
-    $especie = $conexao->real_escape_string($_POST['especie']);
-    $sexo = $conexao->real_escape_string($_POST['sexo']);
-    $castrado = (int)$_POST['castrado'];
-    $raca = !empty($_POST['raca']) ? $conexao->real_escape_string($_POST['raca']) : NULL;
-    $chip = !empty($_POST['chip']) ? $conexao->real_escape_string($_POST['chip']) : NULL;
-    $pelagem = !empty($_POST['pelagem']) ? $conexao->real_escape_string($_POST['pelagem']) : NULL;
-    $peso = !empty($_POST['peso']) ? (float)$_POST['peso'] : NULL;
-    $data_nascimento = !empty($_POST['data_nascimento']) ? $_POST['data_nascimento'] : NULL;
-    $status_adocao = $conexao->real_escape_string($_POST['status_adocao']);
+    $id                  = (int)$_POST['id'];
+    $data_entrada        = $_POST['data_entrada'];
+    $endereco_origem     = !empty($_POST['endereco_origem']) ? trim($_POST['endereco_origem']) : NULL;
+    $motivo_recolhimento = !empty($_POST['motivo_recolhimento']) ? trim($_POST['motivo_recolhimento']) : NULL;
+    $especie             = trim($_POST['especie']);
+    $sexo                = trim($_POST['sexo']);
+    $castrado            = (int)$_POST['castrado'];
+    $raca                = !empty($_POST['raca']) ? trim($_POST['raca']) : NULL;
+    $chip                = !empty($_POST['chip']) ? trim($_POST['chip']) : NULL;
+    $pelagem             = !empty($_POST['pelagem']) ? trim($_POST['pelagem']) : NULL;
+    $peso                = !empty($_POST['peso']) ? (float)$_POST['peso'] : NULL;
+    $data_nascimento     = !empty($_POST['data_nascimento']) ? $_POST['data_nascimento'] : NULL;
+    $status_adocao       = trim($_POST['status_adocao']);
 
-    // Prepara a query de ATUALIZAÇÃO (UPDATE)
+    // Busca foto atual
+    $stmt_f = $conexao->prepare("SELECT foto FROM Animais WHERE id = ?");
+    $stmt_f->bind_param("i", $id);
+    $stmt_f->execute();
+    $atual = $stmt_f->get_result()->fetch_assoc();
+    $caminho_foto = $atual['foto'] ?? NULL;
+    $stmt_f->close();
+
+    // Se marcou para remover a foto atual
+    if (isset($_POST['remover_foto']) && $_POST['remover_foto'] == '1') {
+        if (!empty($caminho_foto) && file_exists($caminho_foto)) {
+            unlink($caminho_foto);
+        }
+        $caminho_foto = NULL;
+    }
+
+    // Se enviou uma nova foto
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $extensoes_permitidas = ['jpg', 'jpeg', 'png', 'webp'];
+        $extensao = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+
+        if (in_array($extensao, $extensoes_permitidas)) {
+            $pasta = 'uploads/animais/';
+            if (!is_dir($pasta)) {
+                mkdir($pasta, 0755, true);
+            }
+            $nome_arquivo = 'animal_' . uniqid() . '.' . $extensao;
+            $destino = $pasta . $nome_arquivo;
+
+            if (move_uploaded_file($_FILES['foto']['tmp_name'], $destino)) {
+                if (!empty($caminho_foto) && file_exists($caminho_foto)) {
+                    unlink($caminho_foto);
+                }
+                $caminho_foto = $destino;
+            }
+        }
+    }
+
     $sql = "UPDATE Animais SET 
                 data_entrada = ?, 
                 endereco_origem = ?, 
@@ -38,26 +72,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 pelagem = ?, 
                 peso = ?, 
                 data_nascimento = ?, 
-                status_adocao = ?
+                status_adocao = ?,
+                foto = ?
             WHERE id = ?";
     
     $stmt = $conexao->prepare($sql);
-    
-    // Binda os parâmetros (os mesmos 12 + o ID no final)
-    // s s s s s i s s s d s s i
-    $stmt->bind_param("sssssisssdssi", 
+    $stmt->bind_param("sssssisssdsssi", 
         $data_entrada, $endereco_origem, $motivo_recolhimento, $especie, $sexo, $castrado, 
-        $raca, $chip, $pelagem, $peso, $data_nascimento, $status_adocao, $id
+        $raca, $chip, $pelagem, $peso, $data_nascimento, $status_adocao, $caminho_foto, $id
     );
 
     if ($stmt->execute()) {
         header("Location: admin_animais.php");
+        exit();
     } else {
         echo "Erro ao atualizar animal: " . $stmt->error;
     }
 
     $stmt->close();
     $conexao->close();
-    exit();
 }
 ?>

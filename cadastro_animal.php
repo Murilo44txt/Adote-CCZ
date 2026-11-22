@@ -11,7 +11,12 @@
 
     <div class="container">
     <h2>Cadastro de Novo Animal</h2>
-    <form action="processa_animal.php" method="POST">
+    <form action="processa_animal.php" method="POST" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label for="foto">Foto do Animal (Opcional):</label>
+            <input type="file" id="foto" name="foto" accept="image/png, image/jpeg, image/webp">
+        </div>
 
         <div class="form-group">
             <label for="data_entrada">Data de Entrada:</label>
@@ -42,12 +47,12 @@
         </div>
 
         <div class="form-group">
-                <label>Castrado:</label>
-                <select name="castrado" required>
-                    <option value="1" id="castrado_sim" name="castrado"  required> Sim</option>
-                    <option value="0" id="castrado_nao" name="castrado"  required> Não</option>
-                </select>
-            </div>
+            <label>Castrado:</label>
+            <select name="castrado" required>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
+            </select>
+        </div>
 
         <div class="form-group">
             <label for="raca">Raça:</label>
@@ -58,6 +63,7 @@
             <label for="chip">Chip (15 dígitos):</label>
             <input type="text" id="chip" name="chip" pattern="\d{15}" title="Digite 15 dígitos numéricos.">
         </div>
+
         <div class="form-group">
             <label for="pelagem">Pelagem:</label>
             <input type="text" id="pelagem" name="pelagem">
@@ -67,6 +73,7 @@
             <label for="peso">Peso (kg):</label>
             <input type="number" id="peso" name="peso" step="0.01">
         </div>
+
         <div class="form-group">
             <label for="data_nascimento">Data de Nascimento (aproximada):</label>
             <input type="date" id="data_nascimento" name="data_nascimento">
@@ -84,10 +91,8 @@
         <button type="submit">Cadastrar Animal</button>
     </form>
     <div class="back-button-container">
-            <a href="index.php" class="back-button">Voltar para Home</a>
-        </div>
+        <a href="admin_animais.php" class="back-button">Voltar para Gerenciamento</a>
     </div>
-
     </div>
 </body>
 </html>

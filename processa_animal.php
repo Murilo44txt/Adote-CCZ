@@ -1,47 +1,58 @@
 <?php
-// Proteção de página: somente admin e master
 session_start();
 if (!isset($_SESSION['loggedin']) || ($_SESSION['nivel_acesso'] != 'admin' && $_SESSION['nivel_acesso'] != 'master')) {
     header("Location: index.php");
     exit;
 }
 
-// Inclui a conexão
-include 'conexao.php'; //
+include 'conexao.php';
 
-// Verifica se os dados foram enviados via POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-    // Coleta e limpa os dados
-    $data_entrada = $_POST['data_entrada'];
-    $endereco_origem = !empty($_POST['endereco_origem']) ? $conexao->real_escape_string($_POST['endereco_origem']) : NULL;
-    $motivo_recolhimento = !empty($_POST['motivo_recolhimento']) ? $conexao->real_escape_string($_POST['motivo_recolhimento']) : NULL;
-    $especie = $conexao->real_escape_string($_POST['especie']);
-    $sexo = $conexao->real_escape_string($_POST['sexo']);
-    $castrado = (int)$_POST['castrado'];
-    $raca = !empty($_POST['raca']) ? $conexao->real_escape_string($_POST['raca']) : NULL;
-    $chip = !empty($_POST['chip']) ? $conexao->real_escape_string($_POST['chip']) : NULL;
-    $pelagem = !empty($_POST['pelagem']) ? $conexao->real_escape_string($_POST['pelagem']) : NULL;
-    $peso = !empty($_POST['peso']) ? (float)$_POST['peso'] : NULL;
-    $data_nascimento = !empty($_POST['data_nascimento']) ? $_POST['data_nascimento'] : NULL;
-    $status_adocao = $conexao->real_escape_string($_POST['status_adocao']);
+    $data_entrada        = $_POST['data_entrada'];
+    $endereco_origem     = !empty($_POST['endereco_origem']) ? trim($_POST['endereco_origem']) : NULL;
+    $motivo_recolhimento = !empty($_POST['motivo_recolhimento']) ? trim($_POST['motivo_recolhimento']) : NULL;
+    $especie             = trim($_POST['especie']);
+    $sexo                = trim($_POST['sexo']);
+    $castrado            = (int)$_POST['castrado'];
+    $raca                = !empty($_POST['raca']) ? trim($_POST['raca']) : NULL;
+    $chip                = !empty($_POST['chip']) ? trim($_POST['chip']) : NULL;
+    $pelagem             = !empty($_POST['pelagem']) ? trim($_POST['pelagem']) : NULL;
+    $peso                = !empty($_POST['peso']) ? (float)$_POST['peso'] : NULL;
+    $data_nascimento     = !empty($_POST['data_nascimento']) ? $_POST['data_nascimento'] : NULL;
+    $status_adocao       = trim($_POST['status_adocao']);
+    $caminho_foto        = NULL;
 
-    // Prepara a query SQL para inserção de dados
-    $sql = "INSERT INTO Animais (data_entrada, endereco_origem, motivo_recolhimento, especie, sexo, castrado, raca, chip, pelagem, peso, data_nascimento, status_adocao) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // Upload opcional da foto do animal
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $extensoes_permitidas = ['jpg', 'jpeg', 'png', 'webp'];
+        $extensao = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+
+        if (in_array($extensao, $extensoes_permitidas)) {
+            $pasta = 'uploads/animais/';
+            if (!is_dir($pasta)) {
+                mkdir($pasta, 0755, true);
+            }
+            $nome_arquivo = 'animal_' . uniqid() . '.' . $extensao;
+            $destino = $pasta . $nome_arquivo;
+
+            if (move_uploaded_file($_FILES['foto']['tmp_name'], $destino)) {
+                $caminho_foto = $destino;
+            }
+        }
+    }
+
+    $sql = "INSERT INTO Animais (data_entrada, endereco_origem, motivo_recolhimento, especie, sexo, castrado, raca, chip, pelagem, peso, data_nascimento, status_adocao, foto) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conexao->prepare($sql);
-    
-    // Binda os parâmetros à query (s=string, i=integer, d=double)
-    // s s s s s i s s s d s s
-    $stmt->bind_param("sssssisssdss", 
+    $stmt->bind_param("sssssisssdsss", 
         $data_entrada, $endereco_origem, $motivo_recolhimento, $especie, $sexo, $castrado, 
-        $raca, $chip, $pelagem, $peso, $data_nascimento, $status_adocao
+        $raca, $chip, $pelagem, $peso, $data_nascimento, $status_adocao, $caminho_foto
     );
 
-    // Executa a query e redireciona
     if ($stmt->execute()) {
         header("Location: admin_animais.php");
+        exit;
     } else {
         echo "Erro ao cadastrar animal: " . $stmt->error;
     }
